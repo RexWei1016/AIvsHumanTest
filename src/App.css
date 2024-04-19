@@ -1,3 +1,13 @@
+.App-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 將 header 分為兩部分 */
+}
+
+.question-section, .ai-progress-section {
+  padding: 20px;
+}
+
+
 .App {
   text-align: center;
 }
