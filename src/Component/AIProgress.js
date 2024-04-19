@@ -65,18 +65,23 @@ function AIProgress({ progress, totalQuestions }) {
   useEffect(() => {
     // 模擬隨機答對或答錯，只模擬新增的題目
     let correctAnswers = answeredCorrectly// >= 0 ? answeredCorrectly : 0; // 如果 answeredCorrectly >= 0 才從前次的題數開始算
-    for (let i = currentQuestion - 1; i < currentQuestion; i++) {
-      const randomAnswer = Math.random() < 0.9 ? 'correct' : 'incorrect'; // 提高答對機率到70%
-      if (randomAnswer === 'correct') {
-        correctAnswers++;
-      }
+    // for (let i = currentQuestion-1; i < currentQuestion; i++) {
+    //   const randomAnswer = Math.random() < 0.9 ? 'correct' : 'incorrect'; // 提高答對機率到70%
+    //   if (randomAnswer === 'correct') {
+    //     correctAnswers++;
+    //   }
+    // }
+    
+    const randomAnswer = Math.random() < 0.9 ? 'correct' : 'incorrect'; // 提高答對機率到70%
+    if (randomAnswer === 'correct' && currentQuestion!=0) {
+      correctAnswers++;
     }
     // 計算已答對的題數
     setAnsweredCorrectly(correctAnswers);
   }, [currentQuestion]);
   
   useEffect(() => {
-    const newScore = (answeredCorrectly-1) * 5; // 每題得 5 分
+    const newScore = (answeredCorrectly) * 5; // 每題得 5 分
     setScore(newScore);
   },[answeredCorrectly])// [currentQuestion, totalQuestions, answeredCorrectly]);
   
