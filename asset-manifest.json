@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/AIvsHumanTest/static/css/main.6f7c8397.css",
+    "main.js": "/AIvsHumanTest/static/js/main.dd3ddc0e.js",
+    "static/js/453.11699b1e.chunk.js": "/AIvsHumanTest/static/js/453.11699b1e.chunk.js",
+    "index.html": "/AIvsHumanTest/index.html",
+    "main.6f7c8397.css.map": "/AIvsHumanTest/static/css/main.6f7c8397.css.map",
+    "main.dd3ddc0e.js.map": "/AIvsHumanTest/static/js/main.dd3ddc0e.js.map",
+    "453.11699b1e.chunk.js.map": "/AIvsHumanTest/static/js/453.11699b1e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6f7c8397.css",
+    "static/js/main.dd3ddc0e.js"
+  ]
+}
