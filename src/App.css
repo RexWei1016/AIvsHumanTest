@@ -3,8 +3,16 @@
   grid-template-columns: 1fr 1fr; /* 將 header 分為兩部分 */
 }
 
-.question-section, .ai-progress-section {
+.question-section {
   padding: 20px;
+}
+.ai-progress-section {
+  background-color: rgba(0, 123, 255, 0.5); /* 使用淺藍色並設置透明度 */
+  padding: 20px;
+  border-radius: 20px; /* 增加圓角 */
+  color: white; /* 白色文字 */
+  margin: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
 }
 
 

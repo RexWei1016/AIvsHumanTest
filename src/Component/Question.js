@@ -11,7 +11,7 @@ function Question({ questionId, questionText, option1Text, option2Text, option3T
           type="radio"
           name={`question${questionId}`}
           value="option1"
-          onChange={() => handleAnswerChange(questionId, 'option1')}
+          onChange={() => handleAnswerChange(questionId, 'A')}
           disabled={disabled}
         />
         <label htmlFor="option1">{option1Text}</label>
@@ -20,7 +20,7 @@ function Question({ questionId, questionText, option1Text, option2Text, option3T
           type="radio"
           name={`question${questionId}`}
           value="option2"
-          onChange={() => handleAnswerChange(questionId, 'option2')}
+          onChange={() => handleAnswerChange(questionId, 'B')}
           disabled={disabled}
         />
         <label htmlFor="option2">{option2Text}</label>
@@ -29,7 +29,7 @@ function Question({ questionId, questionText, option1Text, option2Text, option3T
           type="radio"
           name={`question${questionId}`}
           value="option3"
-          onChange={() => handleAnswerChange(questionId, 'option3')}
+          onChange={() => handleAnswerChange(questionId, 'C')}
           disabled={disabled}
         />
         <label htmlFor="option3">{option3Text}</label>
@@ -38,7 +38,7 @@ function Question({ questionId, questionText, option1Text, option2Text, option3T
           type="radio"
           name={`question${questionId}`}
           value="option4"
-          onChange={() => handleAnswerChange(questionId, 'option4')}
+          onChange={() => handleAnswerChange(questionId, 'D')}
           disabled={disabled}
         />
         <label htmlFor="option4">{option4Text}</label>

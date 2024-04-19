@@ -83,6 +83,8 @@ function AIProgress({ progress, totalQuestions }) {
   return (
     <div>
       <p>{progress === 100 ? 'AI 已完成作答' : 'AI 作答中...進度：' + progress + '%'}</p>
+      <p>{progress === 100 ? '' : '目前已經完成第 ' + (currentQuestion) + ' 題'}</p>
+      <p> AI得分：{score}</p>
       {progress < 100 && (
         <Question
           questionId={currentQuestion}
@@ -95,8 +97,6 @@ function AIProgress({ progress, totalQuestions }) {
           disabled={true}
         />
       )}
-      <p>{progress === 100 ? '' : '目前已經完成第 ' + (currentQuestion) + ' 題'}</p>
-      <p>得分：{score}</p>
     </div>
   );
 }
