@@ -3,6 +3,8 @@ import './App.css';
 import Question from './Component/Question';
 import AIProgress from './Component/AIProgress';
 import NextButton from './Component/NextButton';
+import Timer from './Component/Timer';
+import { formatTime } from './Function/timeUtils';
 import 'bootstrap/dist/css/bootstrap.min.css'; // 引入 Bootstrap 樣式
 
 
@@ -11,70 +13,76 @@ function App() {
   const [aiProgress, setAIProgress] = useState(0); // AI作答進度
   const [currentBlock, setCurrentBlock] = useState(1); // 目前顯示的區塊
   const [score, setScore] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0); // 環境計時器
+  const [completedTime, setCompletedTime] = useState(null); // 測驗完成時間
 
+  const handleTimeUpdate = (newTime) => {
+    setCurrentTime(newTime); // 更新時間狀態
+  };
   const totalQuestions = 10; // 設定題目數量
   const questions = [
     {
       id: 1,
-      text: "問題 1: 有一張很大張的紙，厚度為2mm，每對摺一次，厚度就變成原來的2倍；理論上若要讓這張紙變成1公尺的厚度，則最少要對摺幾次？",
-      options: ["(A)7", "(B)8", "(C)9", "(D)10"],
-      correctAnswer: "D"
+      text: "問題 1: 小明有 3 顆蘋果，他又買了 5 顆蘋果回家。請問小明一共有幾顆蘋果？",
+      options: ["(A)5", "(B)7", "(C)8", "(D)15"],
+      correctAnswer: "C"
     },
     {
       id: 2,
-      text: "問題 2: 連續擲一粒均勻骰子三次，求三次中至少出現一次4點的機率為？",
-      options: ["(A)91/216", "(B)125/216", "(C)71/216", "(D)61/216"],
-      correctAnswer: "A"
-    },
-    {
-      id: 3,
-      text: "問題 3: 在計算機科學中，如果一個數據結構允許先進先出（FIFO）的特性，這種結構稱為什麼？",
-      options: ["(A)堆疊", "(B)隊列", "(C)樹", "(D)圖"],
-      correctAnswer: "B"
-    },
-    {
-      id: 4,
-      text: "問題 4: 哪一個行星是太陽系中最大的？",
-      options: ["(A)地球", "(B)木星", "(C)火星", "(D)水星"],
-      correctAnswer: "B"
-    },
-    {
-      id: 5,
-      text: "問題 5: 「畢達哥拉斯定理」是關於什麼形狀的性質？",
-      options: ["(A)圓形", "(B)橢圓", "(C)正方形", "(D)三角形"],
+      text: "問題 2: 「一石二鳥」這個成語的意思是？",
+      options: ["(A)一次只能做一件事情", "(B)一次做兩件事情", "(C)用石頭打鳥的方法", "(D)雙倍的收穫"],
       correctAnswer: "D"
     },
     {
-      id: 6,
-      text: "問題 6: 一光年大約是多少公里？",
-      options: ["(A)約9.46億公里", "(B)約9.46萬公里", "(C)約9.46兆公里", "(D)約9.46百萬公里"],
+      id: 3,
+      text: "問題 3: 小明有 10 元，他買了一支筆花了 3 元，又買了一本書花了 5 元。請問他還剩下多少錢？",
+      options: ["(A)2", "(B)3", "(C)5", "(D)7"],
       correctAnswer: "A"
     },
     {
+      id: 4,
+      text: "問題 4: 「百聞不如一見」這個成語的意思是？",
+      options: ["(A)聽了很多次也不如親眼看一看", "(B)聽了很多事情就能比見到一件事情了解更多", "(C)一次見到比聽很多次更有意義", "(D)見到一次比聽一次更有意義"],
+      correctAnswer: "A"
+    },
+    {
+      id: 5,
+      text: "問題 5: 植物是如何製造自己的食物的？",
+      options: ["(A)透過呼吸作用", "(B)透過光合作用", "(C)透過土壤中的營養吸收", "(D)透過根部吸收水分"],
+      correctAnswer: "B"
+    },
+    {
+      id: 6,
+      text: "問題 6: 太陽是什麼？",
+      options: ["(A)行星", "(B)恆星", "(C)衛星", "(D)彗星"],
+      correctAnswer: "B"
+    },
+    {
       id: 7,
-      text: "問題 7: 在一次賽跑比賽中，如果你超過了第二名，那麼你現在是第幾名？",
-      options: ["(A)第一名", "(B)第二名", "(C)第三名", "(D)這是不可能的"],
+      text: "問題 7: 水的三態中，哪一個態可以看到？",
+      options: ["(A)氣態", "(B)液態", "(C)固態", "(D)都可以看到"],
       correctAnswer: "D"
     },
     {
       id: 8,
-      text: "問題 8: 國際象棋中，哪一個棋子可以「跳過」其他棋子？",
-      options: ["(A)國王", "(B)皇后", "(C)象", "(D)馬"],
-      correctAnswer: "D"
+      text: "問題 8: 小華有 12 元，他花了一半的錢買了一支筆。請問他買筆時花了多少錢？",
+      options: ["(A)3", "(B)6", "(C)9", "(D)12"],
+      correctAnswer: "B"
     },
     {
       id: 9,
-      text: "問題 9: 哪一種維生素可由人體在陽光照射下自行合成？",
-      options: ["(A)維生素A", "(B)維生素B12", "(C)維生素C", "(D)維生素D"],
+      text: "問題 9: 小明有 5 本書，他買了 3 本新書。請問小明現在總共有幾本書？",
+      options: ["(A)5", "(B)6", "(C)7", "(D)8"],
       correctAnswer: "D"
     },
     {
       id: 10,
-      text: "問題 10: 歐洲的哪個國家有一個城市是既是首都也是國家名稱？",
-      options: ["(A)盧森堡", "(B)巴黎", "(C)倫敦", "(D)里斯本"],
-      correctAnswer: "A"
+      text: "問題 10: 小華有 10 支鉛筆，他送了小明一半的鉛筆。請問小華還剩下幾支鉛筆？",
+      options: ["(A)2", "(B)3", "(C)5", "(D)10"],
+      correctAnswer: "C"
     }
   ];
+  
   
 
 
@@ -106,8 +114,9 @@ function App() {
       if (currentBlock < questions.length) {
         setCurrentBlock(prevBlock => prevBlock + 1);
       } else {
+        setCompletedTime(currentTime); // 保存完成時間
         console.log('測驗完成，您的得分：' + score);
-        alert('測驗已完成，您的得分：' + score);
+        //alert('測驗已完成，您的得分：' + score);
       }
     } else {
       alert('請先作答再進行到下一題。');
@@ -131,11 +140,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="score-display">當前得分：{score}</div>
+        <Timer onTimeUpdate={handleTimeUpdate} show={true} />
+        {completedTime && <div>您已完成作答, 總作答時間：{'['+formatTime(completedTime)+']'} </div>}
         <div className="question-section">
           {questions.map((question, index) => (
             <div key={question.id} style={{ display: currentBlock === index + 1 ? 'block' : 'none' }}>
               <h2>《AI & 人腦大對決》</h2>
+              <div className="score-display">當前得分：{score}</div>
               <Question
                 questionId={question.id}
                 questionText={question.text}
