@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Question from './Question';
 import Timer from './Timer';
 import { formatTime } from '../Function/timeUtils';
-function AIProgress({ progress, totalQuestions }) {
+function AIProgress({ progress, totalQuestions, myTime }) {
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0); // 追蹤目前正在進行的問題數
   const [answeredCorrectly, setAnsweredCorrectly] = useState(0); // 已答對的題數
@@ -70,6 +70,7 @@ function AIProgress({ progress, totalQuestions }) {
     setCurrentQuestion(Math.floor((totalQuestions * progress) / 100) || 0);
     if(progress===100){
       setCompletedTime(currentTime); // 保存完成時間
+      myTime(currentTime)
     }
   }, [progress, totalQuestions]);
   

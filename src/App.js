@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Question from './Component/Question';
 import AIProgress from './Component/AIProgress';
@@ -9,13 +9,17 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // 引入 Bootstrap 樣式
 
 
 function App() {
+  const isMounted = useRef(false);// 嚴格狀態的判斷
   const [answers, setAnswers] = useState({});
   const [aiProgress, setAIProgress] = useState(0); // AI作答進度
   const [currentBlock, setCurrentBlock] = useState(1); // 目前顯示的區塊
   const [score, setScore] = useState(0);
   const [currentTime, setCurrentTime] = useState(0); // 環境計時器
   const [completedTime, setCompletedTime] = useState(null); // 測驗完成時間
-  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+  const [AIcompletedTime, AIsetCompletedTime] = useState(null); // 測驗完成時間
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);// 問卷回答是否顯示
+  const [randomNumber, setRandomNumber] = useState(0);// 決定回答速度
+
 
 
   const handleTimeUpdate = (newTime) => {
@@ -124,7 +128,7 @@ function App() {
       } else {
         setIsQuizCompleted(true);
         setCompletedTime(currentTime); // 保存完成時間
-        console.log('測驗完成，您的得分：' + score);
+        // console.log('測驗完成，您的得分：' + score);
         //alert('測驗已完成，您的得分：' + score);
       }
     } else {
@@ -137,10 +141,17 @@ function App() {
 
 
   useEffect(() => {
+    
+    // 在進入頁面時，決定數字是10還是5
+    const num = Math.random() * 10 + 1; // 產生1到10之間的亂數
+    const numberToUse = num > 5 ? 10 : 4; // 將閥值設定在0.5
+
+    setRandomNumber(numberToUse)
+    // console.log('使用的數字：', numberToUse);
     // 模擬 AI 作答的進度，每秒更新一次
     const interval = setInterval(() => {
       setAIProgress(prevProgress => {
-        const newProgress = prevProgress + Math.floor(Math.random() * 5); // 隨機增加進度
+        const newProgress = prevProgress + Math.floor(Math.random() * numberToUse); // 隨機增加進度
         // 8是快的, 6是慢的
         return newProgress > 100 ? 100 : newProgress; // 確保進度不超過 100%
       });
@@ -154,6 +165,7 @@ function App() {
       <header className="App-header">
         <Timer onTimeUpdate={handleTimeUpdate} show={true} />
         {completedTime && <div>您已完成作答, 總作答時間：{'['+formatTime(completedTime)+']'} </div>}
+        {AIcompletedTime && <div>AI已完成作答, 總作答時間：{'['+formatTime(AIcompletedTime)+']'} </div>}
         <div className="question-section">
           {questions.map((question, index) => (
             <div key={question.id} style={{ display: currentBlock === index + 1 ? 'block' : 'none' }}>
@@ -162,8 +174,15 @@ function App() {
         {isQuizCompleted && (
           <div className="google-form">
             {/* 在這裡放置你的 Google 表單嵌入代碼 */}
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeWF0fBW2ft6URmWCmbFGgqVkAXIIT_7Wb7u1LVeAzOKC9eJA/viewform?embedded=true" width="640" height="3238" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
-          </div>
+              {randomNumber === 4 ? (
+                // 如果 RandomNumber 等於 4，嵌入第一個表單
+                <iframe src="https://forms.gle/G4rc9MrbuLVtNTPx6" width="100%" style={{ height: '100vh' }} frameBorder="0" marginHeight="0" marginWidth="0">載入中…</iframe>
+              ) : (
+                // 如果 RandomNumber 等於 10，嵌入第二個表單
+                <iframe src="https://forms.gle/jBFB1yrKRwwSPktc8" width="100%" style={{ height: '100vh' }} frameBorder="0" marginHeight="0" marginWidth="0">載入中…</iframe>
+
+              )}
+            </div>
         )}
               <div className="score-display">當前得分：{score}</div>
               <Question
@@ -181,7 +200,7 @@ function App() {
           ))}
         </div>
         <div className="ai-progress-section">
-          <AIProgress progress={aiProgress} totalQuestions={totalQuestions} />
+          <AIProgress progress={aiProgress} totalQuestions={totalQuestions} myTime={AIsetCompletedTime} />
         </div>
         
       </header>
