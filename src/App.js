@@ -15,6 +15,8 @@ function App() {
   const [score, setScore] = useState(0);
   const [currentTime, setCurrentTime] = useState(0); // 環境計時器
   const [completedTime, setCompletedTime] = useState(null); // 測驗完成時間
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+
 
   const handleTimeUpdate = (newTime) => {
     setCurrentTime(newTime); // 更新時間狀態
@@ -104,16 +106,23 @@ function App() {
   
 
   const handleNextBlock = () => {
+    
+    if (isQuizCompleted) {
+      // 如果測驗已完成，不執行任何操作
+      return;
+    }
+
     if (answers[currentBlock]) {  // 檢查是否已回答當前題目
       // 獲取當前問題
       const question = questions[currentBlock - 1]; // 陣列索引從0開始，而currentBlock從1開始
       if (answers[currentBlock] === question.correctAnswer) {
-        setScore(prevScore => prevScore + 5);  // 答對加一分
+        setScore(prevScore => prevScore + 10);  // 答對加一分
       }
   
       if (currentBlock < questions.length) {
         setCurrentBlock(prevBlock => prevBlock + 1);
       } else {
+        setIsQuizCompleted(true);
         setCompletedTime(currentTime); // 保存完成時間
         console.log('測驗完成，您的得分：' + score);
         //alert('測驗已完成，您的得分：' + score);
@@ -121,6 +130,8 @@ function App() {
     } else {
       alert('請先作答再進行到下一題。');
     }
+
+    
   };
   
 
@@ -129,7 +140,8 @@ function App() {
     // 模擬 AI 作答的進度，每秒更新一次
     const interval = setInterval(() => {
       setAIProgress(prevProgress => {
-        const newProgress = prevProgress + Math.floor(Math.random() * 10); // 隨機增加進度
+        const newProgress = prevProgress + Math.floor(Math.random() * 5); // 隨機增加進度
+        // 8是快的, 6是慢的
         return newProgress > 100 ? 100 : newProgress; // 確保進度不超過 100%
       });
     }, 1000);
@@ -146,6 +158,13 @@ function App() {
           {questions.map((question, index) => (
             <div key={question.id} style={{ display: currentBlock === index + 1 ? 'block' : 'none' }}>
               <h2>《AI & 人腦大對決》</h2>
+              
+        {isQuizCompleted && (
+          <div className="google-form">
+            {/* 在這裡放置你的 Google 表單嵌入代碼 */}
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeWF0fBW2ft6URmWCmbFGgqVkAXIIT_7Wb7u1LVeAzOKC9eJA/viewform?embedded=true" width="640" height="3238" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
+          </div>
+        )}
               <div className="score-display">當前得分：{score}</div>
               <Question
                 questionId={question.id}
@@ -164,6 +183,7 @@ function App() {
         <div className="ai-progress-section">
           <AIProgress progress={aiProgress} totalQuestions={totalQuestions} />
         </div>
+        
       </header>
     </div>
   );

@@ -83,7 +83,7 @@ function AIProgress({ progress, totalQuestions }) {
     //   }
     // }
     
-    const randomAnswer = Math.random() < 0.9 ? 'correct' : 'incorrect'; // 提高答對機率到70%
+    const randomAnswer = Math.random() < 0.99 ? 'correct' : 'incorrect'; // 提高答對機率到70%
     if (randomAnswer === 'correct' && currentQuestion!=0) {
       correctAnswers++;
     }
@@ -92,7 +92,7 @@ function AIProgress({ progress, totalQuestions }) {
   }, [currentQuestion]);
   
   useEffect(() => {
-    const newScore = (answeredCorrectly) * 5; // 每題得 5 分
+    const newScore = (answeredCorrectly) * 10; // 每題得 5 分
     setScore(newScore);
   },[answeredCorrectly])// [currentQuestion, totalQuestions, answeredCorrectly]);
   
